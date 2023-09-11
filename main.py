@@ -9,6 +9,7 @@ from Model.ultils import *
 from Model.Prompt.prompt import RecommenderPrompt
 
 df_courses = pd.read_csv('Data/courses.csv')
+
 top_k = 10
 script_about = '''
 This web app is a demo of the Recommender system Scientific research project
@@ -46,13 +47,12 @@ with maincol1:
         case "Filter":
             category_tab, title_tab = st.tabs(["Filter by Category","Filter by Title"])
             with category_tab:
-                slbCategory = st.selectbox("Category",  df_courses["item_category"].value_counts().index.to_list())
+                slbCategory = st.selectbox("Category", get_categories())
 
                 col1, col2 = st.columns(2)
                 with col1:
                     slbSortOrder = st.radio("Sort Order", ["Descending","Ascending"])
                 with col2:
-                    #? fixed sorted by popular!!!
                     slbSortByMem = st.radio("Sort By", ["Rating", "Popular"])
                 btnType = st.button("Recommend by Category")
                 

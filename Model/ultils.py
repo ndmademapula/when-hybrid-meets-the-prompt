@@ -5,15 +5,17 @@ import streamlit as st
 
 df_courses = pd.read_csv('Data/courses.csv')
 
-# def get_categories():
-#     categories = []
-#     for i in df_courses.index:
-#         category = df_courses.loc[i,'item_category'].split(',')
-#         for j in range(len(category)):
-#             categories.append(category[j].strip())
-#     categories = pd.Series(categories).value_counts().index.to_list()
-#     categories.insert(0,"All")
-#     return categories 
+def get_categories():
+    categories = []
+    categories = df_courses["item_category"].value_counts().index.to_list()
+
+    # for i in df_courses.index:
+    #     category = df_courses.loc[i,'item_category']
+    #     for j in range(len(category)):
+    #         categories.append(category[j].strip())
+    # categories = pd.Series(categories).value_counts().index.to_list()
+    categories.insert(0,"All")
+    return categories 
 
 def print_rec(top_k,df):
     for i in range(top_k):
