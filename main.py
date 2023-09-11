@@ -33,29 +33,27 @@ with st.sidebar:
     appreciation_tab = st.tabs(["Appreciation"])
     st.markdown(script_appreciation)
 
-
-
 maincol1, maincol2 = st.columns([2,1],gap="medium")
 with maincol1:
     st.caption("Choose how would you like to get recommended")
-    rec_optio = option_menu(
+    rec_option = option_menu(
         menu_title=None,
         options=["Filter","RecSys Model","Prompt"],
         orientation="horizontal",
     )
 
-    match rec_optio:
+    match rec_option:
         case "Filter":
-            category_tab, title_tab = st.tabs(["Filter by Level","Filter by Title"])
+            category_tab, title_tab = st.tabs(["Filter by Category","Filter by Title"])
             with category_tab:
-                slbCategory = st.selectbox("Level",  get_categories())
+                slbCategory = st.selectbox("Category",  df_courses["item_category"].value_counts().index.to_list())
 
                 col1, col2 = st.columns(2)
                 with col1:
                     slbSortOrder = st.radio("Sort Order", ["Descending","Ascending"])
                 with col2:
                     #? fixed sorted by popular!!!
-                    slbSortByMem = st.radio("Sort By", ["Rating"])
+                    slbSortByMem = st.radio("Sort By", ["Rating", "Popular"])
                 btnType = st.button("Recommend by Category")
                 
                 sort_order = False if slbSortOrder == "Descending" else True
@@ -119,10 +117,10 @@ with maincol1:
                         prompt.recCourses()
 
 with maincol2:
-    # with st.container():
-    #     st.caption('Most popular')
-    #     print_rec(top_k=5,df=df_courses.sort_values("item_members",ascending=False))
-    # st.divider()
+    with st.container():
+        st.caption('Most popular')
+        print_rec(top_k=5,df=df_courses.sort_values("item_members",ascending=False))
+    st.divider()
     with st.container():
         st.caption("Most rated")
         print_rec(top_k=5,df=df_courses.sort_values("item_avg_rating", ascending=False))

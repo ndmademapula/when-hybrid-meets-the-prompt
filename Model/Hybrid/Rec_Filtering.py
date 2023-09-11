@@ -29,21 +29,21 @@ class RecommenderFiltering:
                 keyword_search = self.rec.loc[i, "item_name"].split(",")
                 if self.item_title.lower().strip() in str(keyword_search).lower().strip():
                     idx.append(i)
-            else:
-                return None
+            # else:
+            #     return None
         self.rec = self.rec.loc[idx]
     
     def _sort_values(self, df):
         df_sorted = df.sort_values("item_avg_rating", ascending=self.sort_order)
-    #     if self.sort_by_mem == True:
-    #         df_sorted = df.sort_values("item_members", ascending=self.sort_order)
-    #     else:
-    #         df_sorted = df.sort_values("item_avg_rating", ascending=self.sort_order)
+        if self.sort_by_mem == True:
+            df_sorted = df.sort_values("item_members", ascending=self.sort_order)
+        else:
+            df_sorted = df.sort_values("item_avg_rating", ascending=self.sort_order)
         return df_sorted
         
     def return_recommend(self):
         if len(self.rec) == 0:
-            return 
+            return None
         elif len(self.rec) > self.top_k:
             self.rec_rs = self.rec.iloc[:self.top_k].copy()
         else:
@@ -67,7 +67,7 @@ class RecommenderFiltering:
             self._filter_title()
             if len(self.rec) == 0:
                 print(f"No matching products found for {self.item_title}")
-                return 
+                return None
         
         self.rec = self._sort_values(self.rec)
         self.return_recommend()
