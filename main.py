@@ -8,7 +8,8 @@ from Model.Hybrid.Rec_Filtering import RecommenderFiltering
 from Model.ultils import *
 from Model.Prompt.prompt import RecommenderPrompt
 
-df_courses = pd.read_csv('Data/courses.csv')
+df_courses = pd.read_csv('Data/courses.csv').dropna()
+df_courses= df_courses.reset_index(drop=True)
 
 top_k = 10
 script_about = '''

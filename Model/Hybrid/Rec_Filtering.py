@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import streamlit as st
+from Model.ultils import print_rec
 
 class RecommenderFiltering:
     # constructor
@@ -43,12 +45,12 @@ class RecommenderFiltering:
         
     def return_recommend(self):
         if len(self.rec) == 0:
-            return None
+            self.rec_rs = f"No matching products found for {self.item_title}"
         elif len(self.rec) > self.top_k:
             self.rec_rs = self.rec.iloc[:self.top_k].copy()
         else:
             self.rec_rs = self.rec[:].copy()  
-        return self.rec_rs    
+        return print_rec(top_k=self.top_k, df=self.rec_rs)    
 
     # main fuction
     def keyword_search(self, item_categories=None, item_title=None):
@@ -60,6 +62,7 @@ class RecommenderFiltering:
             self._filter_categories()   
             if len(self.rec) == 0:
                 print(f"No matching products found for {self.item_categories}")
+                st.write(f"No matching products found for {self.item_categories}")
                 return None
 
         # filter by item_category
@@ -67,6 +70,7 @@ class RecommenderFiltering:
             self._filter_title()
             if len(self.rec) == 0:
                 print(f"No matching products found for {self.item_title}")
+                st.write(f"No matching products found for {self.item_title}")
                 return None
         
         self.rec = self._sort_values(self.rec)
