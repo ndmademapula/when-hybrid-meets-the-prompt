@@ -120,8 +120,8 @@ with maincol1:
 with maincol2:
     with st.container():
         st.caption('Most popular')
-        print_rec(top_k=5,df=df_courses.sort_values("item_members",ascending=False))
+        print_list(top_k=5,df=df_courses.sort_values("item_members",ascending=False))
     st.divider()
     with st.container():
         st.caption("Most rated")
-        print_rec(top_k=5,df=df_courses.sort_values("item_avg_rating", ascending=False))
+        print_list(top_k=5,df=df_courses.sort_values("item_avg_rating", ascending=False))
