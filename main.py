@@ -4,12 +4,14 @@ import pandas as pd
 import joblib
 # from sentence_transformers import SentenceTransformer 
 
+from Model.Hybrid.Rec_Hybrid import *
 from Model.Filtering.Rec_Filtering import RecommenderFiltering
 from Model.ultils import *
 from Model.Prompt.prompt import RecommenderPrompt
 
 df_courses = pd.read_csv('Data/courses.csv').dropna()
 df_courses= df_courses.reset_index(drop=True)
+df_rating = pd.read_csv("Data/ratings.csv")
 
 top_k = 10
 script_about = '''
@@ -95,6 +97,41 @@ def run():
 
             case "Hybrid Model":
                 st.warning("Sr sr (￣ε(#￣) Model still in testing...")
+
+                data, users, products = load_and_preprocess_data()
+                recommender = create_and_fit_recommender(
+                    "als",
+                    data["rating"],
+                    users,
+                    products,
+                )
+                with st.form("recommend"):
+                    # Let the user select the user to investigate
+                    user = st.selectbox(
+                        "Select a customer to get his recommendations",
+                        df_rating.user_id.unique(),
+                    )
+
+                    items_to_recommend = st.slider("How many items to recommend?", 1, 10, 5)
+                    print(items_to_recommend)
+
+                    submitted = st.form_submit_button("Recommend!")
+                    if submitted:
+                        # show_purhcase_history(user, data)
+                        display_user_char(user, df_rating)
+                        suggestions_and_score = recommender.recommend_products(
+                            user, items_to_recommend
+                        )
+                        print_suggestions(suggestions_and_score[0], data)
+                        explain_recommendation(recommender, user, suggestions_and_score[0], data)
+
+                        st.markdown(
+                            "## How the purchases of similar users influnce the recommendation"
+                        )
+                        fig = display_recommendation_plots(
+                            user, suggestions_and_score[0], df_rating, recommender
+                        )
+                        st.plotly_chart(fig)
 
             case "Prompt":
 
