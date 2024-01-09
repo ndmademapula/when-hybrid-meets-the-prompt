@@ -4,7 +4,6 @@ import pandas as pd
 import joblib
 # from sentence_transformers import SentenceTransformer 
 
-from Model.Hybrid.Rec_Hybrid import *
 from Model.Filtering.Rec_Filtering import RecommenderFiltering
 from Model.ultils import *
 from Model.Prompt.prompt import RecommenderPrompt
